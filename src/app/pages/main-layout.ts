@@ -9,9 +9,14 @@ import { Footer } from "../core/components/footer";
     imports:[RouterOutlet,Header,Footer],
     template:`
     <app-header/>
+    <div class=" px-12 flex-1 container mx-auto">
     <router-outlet/>
+    </div>
     <app-footer/>
     `,
+    host:{
+        class:'flex flex-col min-h-screen bg-slate-100'
+    }
 })
 
 export class MainLayout{
