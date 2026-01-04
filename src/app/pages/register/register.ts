@@ -6,6 +6,10 @@ import { FormErrors } from '../../shared/components/form-errors';
 import { registerSchema } from './register-schema';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Store } from '@ngrx/store';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { authFeatures } from '../../shared/store/auth-feature';
+import { authActions } from '../../shared/store/auth-actions';
 
 @Component({
   selector: 'app-register',
@@ -74,7 +78,9 @@ import { CommonModule } from '@angular/common';
           <app-form-errors [control]="registerForm.confirmPassword()" />
         </div>
 
-        <button appButton class="w-full" type="submit" [disabled]="registerForm().invalid()" >Register</button>
+        <button appButton class="w-full" type="submit" [disabled]="registerForm().invalid() || isLoading()" >
+        {{ isLoading() ? 'Registering...' : 'Register' }}
+        </button>
 
         <p class="text-sm text-center text-slate-500 mt-4">
           Already have an account?
@@ -95,6 +101,9 @@ export class Register {
   });
 
   registerForm = form(this.registerModel, registerSchema);
+  private readonly store = inject(Store);
+  protected readonly isLoading = toSignal(this.store.select(authFeatures.selectIsLoading));
+
 
   onSubmit(event: Event) {
     event.preventDefault();
@@ -102,5 +111,6 @@ export class Register {
     const {confirmPassword, ...rest} = this.registerForm().value();
     const registerRequest = {id, ...rest};
     console.log('Register Request:', registerRequest);
+    this.store.dispatch(authActions.register(registerRequest));
   }
 }
