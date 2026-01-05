@@ -3,6 +3,8 @@ import { provideState } from '@ngrx/store';
 import { productFeature } from './pages/products/store/product-feature';
 import { provideEffects } from '@ngrx/effects';
 import * as productEffect from './pages/products/store/product-effect';
+import { profileFeature } from './pages/profile/store/profile-feature';
+import * as profileEffects from './pages/profile/store/profile-effect';
 
 export const routes: Routes = [
     {
@@ -31,7 +33,11 @@ export const routes: Routes = [
             },
             {
                 path: 'profile',
-                loadComponent: () => import('./pages/profile/profile').then(m => m.Profile)
+                loadComponent: () => import('./pages/profile/profile').then(m => m.Profile),
+                providers: [provideState(profileFeature), provideEffects(profileEffects)],
+
+                // which means now the profileFeature and profileEffects are available only when the user navigates to the profile route.
+
             },
             {
                 path: 'cart',
