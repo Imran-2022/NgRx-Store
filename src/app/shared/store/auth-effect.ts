@@ -71,3 +71,20 @@ export const registerEffect = createEffect(
         functional: true,
     }
 );
+
+export const logoutEffect = createEffect(
+  (actions$ = inject(Actions), storage = inject(MyStorage), router = inject(Router), toast = inject(NgToastService)) => {
+    return actions$.pipe(
+      ofType(authActions.logout),
+      map(() => {
+        storage.removeItem('ngrxstore_token');
+        router.navigateByUrl('/login');
+        toast.success('Logout Successful', 'SUCCESS');
+        return authActions.logoutSuccess();
+      })
+    );
+  },
+  {
+    functional: true,
+  }
+);

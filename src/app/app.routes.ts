@@ -7,6 +7,7 @@ import { profileFeature } from './pages/profile/store/profile-feature';
 import * as profileEffects from './pages/profile/store/profile-effect';
 import { cartFeature } from './pages/cart/store/cart-feature';
 import * as cartEffects from './pages/cart/store/cart-effect';
+import { authGuard } from './core/guards/auth-guard';
 
 export const routes: Routes = [
     {
@@ -22,7 +23,7 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/main-layout').then(m => m.MainLayout),
         providers: [provideState(cartFeature), provideEffects(cartEffects)],
         
-        // canActivate: [authGuard],
+        canActivate: [authGuard],
         
         children: [
             {

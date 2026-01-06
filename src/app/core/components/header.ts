@@ -5,6 +5,7 @@ import { LucideAngularModule,LogOut,LogIn,User,ShoppingCart } from 'lucide-angul
 import { Store } from '@ngrx/store';
 import { cartFeature } from '../../pages/cart/store/cart-feature';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { authActions } from '../../shared/store/auth-actions';
 
 @Component({
     selector: 'app-header',
@@ -19,6 +20,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
             appButton
             variant="ghost"
             type="button"
+            (click)="logout()"
             class="text-white hover:text-gray-300 hover:bg-white/10"
           >
            <lucide-icon [img]="icons.LogOut" class="size-4 mr-2" />
@@ -54,7 +56,10 @@ import { toSignal } from '@angular/core/rxjs-interop';
 })
 export class Header {
     protected readonly icons={LogOut,LogIn,User,ShoppingCart};
-    private readonly state = inject(Store);
-    protected readonly cartItemCount = toSignal(this.state.select(cartFeature.selectCartCount), { initialValue: 0 });
+    private readonly store = inject(Store);
+    protected readonly cartItemCount = toSignal(this.store.select(cartFeature.selectCartCount), { initialValue: 0 });
 
+    protected logout() {
+    this.store.dispatch(authActions.logout());
+  }
 }
