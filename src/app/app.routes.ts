@@ -1,10 +1,12 @@
 import { Routes } from '@angular/router';
 import { provideState } from '@ngrx/store';
 import { productFeature } from './pages/products/store/product-feature';
-import { provideEffects } from '@ngrx/effects';
+import { createEffect, provideEffects } from '@ngrx/effects';
 import * as productEffect from './pages/products/store/product-effect';
 import { profileFeature } from './pages/profile/store/profile-feature';
 import * as profileEffects from './pages/profile/store/profile-effect';
+import { cartFeature } from './pages/cart/store/cart-feature';
+import * as cartEffects from './pages/cart/store/cart-effect';
 
 export const routes: Routes = [
     {
@@ -18,6 +20,8 @@ export const routes: Routes = [
     {
         path: '',
         loadComponent: () => import('./pages/main-layout').then(m => m.MainLayout),
+        providers: [provideState(cartFeature), provideEffects(cartEffects)],
+        
         // canActivate: [authGuard],
         
         children: [
@@ -41,7 +45,7 @@ export const routes: Routes = [
             },
             {
                 path: 'cart',
-                loadComponent: () => import('./pages/cart/cart').then(m => m.Cart)
+                loadComponent: () => import('./pages/cart/cart').then(m => m.Cart),
             }
         ]
     }

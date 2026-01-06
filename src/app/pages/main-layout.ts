@@ -1,7 +1,9 @@
-import { Component } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
 import { Header } from "../core/components/header";
 import { Footer } from "../core/components/footer";
+import { Store } from "@ngrx/store";
+import { cartActions } from "./cart/store/cart-actions";
 
 @Component({
     selector:'app-main-layout',
@@ -19,6 +21,11 @@ import { Footer } from "../core/components/footer";
     }
 })
 
-export class MainLayout{
 
+export class MainLayout implements OnInit {
+  private readonly store = inject(Store);
+
+  ngOnInit(): void {
+    this.store.dispatch(cartActions.load());
+  }
 }

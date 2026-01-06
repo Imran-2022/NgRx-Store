@@ -2,6 +2,9 @@ import { Component, inject } from '@angular/core';
 import { Button } from '../../shared/components/button';
 import { RouterLink } from '@angular/router';
 import { LucideAngularModule,LogOut,LogIn,User,ShoppingCart } from 'lucide-angular';
+import { Store } from '@ngrx/store';
+import { cartFeature } from '../../pages/cart/store/cart-feature';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'app-header',
@@ -41,7 +44,7 @@ import { LucideAngularModule,LogOut,LogIn,User,ShoppingCart } from 'lucide-angul
             <span
               class="absolute -top-1 -right-1 size-5 flex items-center justify-center bg-amber-500 text-xs font-medium rounded-full"
             >
-              10
+              {{cartItemCount()}}
             </span>
           </button>
         </div>
@@ -51,4 +54,7 @@ import { LucideAngularModule,LogOut,LogIn,User,ShoppingCart } from 'lucide-angul
 })
 export class Header {
     protected readonly icons={LogOut,LogIn,User,ShoppingCart};
+    private readonly state = inject(Store);
+    protected readonly cartItemCount = toSignal(this.state.select(cartFeature.selectCartCount), { initialValue: 0 });
+
 }

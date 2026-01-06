@@ -6,6 +6,8 @@ import { productActions } from "./store/product-actions";
 import { JsonPipe } from "@angular/common";
 import { ProductCard } from "../../core/components/product-cart";
 import { FormsModule } from "@angular/forms";
+import { Product } from "./types/product-type";
+import { cartActions } from "../cart/store/cart-actions";
 
 @Component({
   selector: 'app-products',
@@ -37,7 +39,7 @@ import { FormsModule } from "@angular/forms";
       } @else {
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         @for (product of products(); track product.id) {
-        <app-product-card [product]="product" />
+        <app-product-card (addToCart)="onAddToCart($event)" [product]="product" />
         }
       </div>
       }
@@ -59,5 +61,9 @@ export class Products implements OnInit {
     ngOnInit(): void {
         this.store.dispatch(productActions.load());
     }
+
+     protected onAddToCart(product: Product): void {
+    this.store.dispatch(cartActions.addToCart({ product }));
+  }
 
 }
